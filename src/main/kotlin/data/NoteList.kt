@@ -1,5 +1,5 @@
 package data
 
-object NoteList:ListOfData {
-    override var list:MutableList<Data> = mutableListOf()
+class NoteList : ListOfData {
+    override var list: MutableList<Data> = mutableListOf()
 }

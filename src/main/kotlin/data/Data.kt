@@ -1,5 +1,6 @@
 package data
 
-interface Data {
-    var name:String
+sealed class Data(open val name: String) {
 }
+
+

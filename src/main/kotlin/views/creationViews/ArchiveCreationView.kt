@@ -1,16 +1,13 @@
 package views.creationViews
 
-import data.Archive
 import data.ArchiveList
-import views.View
-import java.util.*
 
-class ArchiveCreationView : View(){
+class ArchiveCreationView : CreationView(ArchiveList) {
     override val nameOfView = "Создание архива:"
-    fun createArchive(){
-        println(nameOfView)
-        println("Введите имя архива")
-        val name = Scanner(System.`in`).nextLine()
-        ArchiveList.list.add(Archive(name))
+    override fun createCommands(): List<Pair<String, () -> Unit>> {
+        val commands = mutableListOf<Pair<String, () -> Unit>>()
+        commands.add(Pair("Создать архив",createInstance()))
+        commands.add(Pair("Вернуться к списку", exit()))
+        return commands
     }
 }

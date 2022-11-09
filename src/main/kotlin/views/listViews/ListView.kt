@@ -1,28 +1,45 @@
 package views.listViews
 
+import data.*
+import views.NoteView
 import views.View
-import java.util.*
+import views.creationViews.ArchiveCreationView
+import views.creationViews.NoteCreationView
 
-abstract class ListView: View() {
-    abstract fun createCommands():List<Pair<String,()->Unit>>
+abstract class ListView(private val list: ListOfData) : View() {
+    override var exit = false
+    abstract val createElementText: String
+    override fun createCommands(): List<Pair<String, () -> Unit>> {
+        val commands = mutableListOf<Pair<String, () -> Unit>>()
+        commands.add(Pair(createElementText, creationView()))
+        for (el in list.list)
+            commands.add(Pair(el.name, goInto(el)))
+        commands.add(Pair("Выйти", exit()))
+        return commands
 
-    var exit = false
-    private fun printView(elements:List<String>){
-        println(nameOfView)
-        elements.forEachIndexed{index, data ->  println("${index}. ${data}")}
     }
-    fun readCommand(){
-        while (!exit){
-            val commandsWithFun = createCommands()
-            val commands = commandsWithFun.map { it -> it.first }
-            printView(commands)
-            println("Выберите пожалуйста действие:")
-            val command = Scanner(System.`in`).nextLine().toIntOrNull()
-            if (command != null){
-                commandsWithFun[command].second.invoke()
-            } else {
-                println("это была не цифра, давай попробуем снова!")
+
+    private fun goInto(data: Data): () -> Unit = {
+        val view = when (data) {
+            is Archive -> {
+                NoteListView(data)
+            }
+            is Note -> {
+                NoteView(data)
             }
         }
+        view.readCommand()
+    }
+
+    private fun creationView(): () -> Unit = {
+        val creationVew = when (list) {
+            is ArchiveList -> {
+                ArchiveCreationView()
+            }
+            is NoteList -> {
+                NoteCreationView(list)
+            }
+        }
+        creationVew.readCommand()
     }
 }

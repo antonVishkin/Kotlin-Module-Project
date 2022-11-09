@@ -1,5 +1,5 @@
 package data
 
-object ArchiveList: ListOfData {
+object ArchiveList : ListOfData {
     override var list: MutableList<Data> = mutableListOf()
 }

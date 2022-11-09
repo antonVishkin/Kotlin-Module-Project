@@ -1,19 +1,13 @@
 package views.creationViews
 
-import data.Archive
-import data.ArchiveList
-import data.Note
-import views.View
-import java.util.*
+import data.NoteList
 
-class NoteCreationView(private val archive: Archive) : View() {
-    override val nameOfView = "Создание заметки"
-    fun createNote(){
-        println(nameOfView)
-        println("Введите имя заметки")
-        val name = Scanner(System.`in`).nextLine()
-        println("Введите текст заметки")
-        val text = Scanner(System.`in`).nextLine()
-        archive.addNoteToArchive(Note(name,text))
+class NoteCreationView(noteList: NoteList) : CreationView(noteList) {
+    override val nameOfView = "Создание заметки:"
+    override fun createCommands(): List<Pair<String, () -> Unit>> {
+        val commands = mutableListOf<Pair<String, () -> Unit>>()
+        commands.add(Pair("Создать заметку",createInstance()))
+        commands.add(Pair("Вернуться к списку", exit()))
+        return commands
     }
 }
